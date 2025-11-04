@@ -1,15 +1,12 @@
 # Clinical Voice Notes – Requirements Clarification
 
-&gt; Rewritten key requirements in plain language, followed by 9 clarifying questions we would ask Product / Medical-compliance before we write a single line of code.
-
---------------------------------------------------
-Rewritten Key Requirements (TL;DR)
+Rewritten Key Requirements
 --------------------------------------------------
 1. Doctors can hit “Record” on a mobile app, speak, and upload the audio.  
 2. Platform turns speech into text (STT), then runs an AI model to produce a concise medical summary.  
 3. Summary can be copied into the clinic’s EHR; the original audio & text are kept for audit.  
 4. Personal (non-patient) memos must be stored separately and never mixed with patient data.  
-5. Everything must be RGPD (GDPR) compliant: consent, minimisation, encryption, retention, deletion.  
+5. Everything must be RGPD (GDPR) complia nt: consent, minimisation, encryption, retention, deletion.  
 6. Web dashboard shows recordings, transcripts, summaries, and audit trails in real time.  
 7. New release wants **review workflows** (doctor approves AI text before it lands in EHR), **data-governance** (rules per clinic), and **better AI guardrails** (no hallucinations, no prompt injection).
 

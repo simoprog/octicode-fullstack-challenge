@@ -1,0 +1,232 @@
+classDiagram
+    class Recording {
+        +UUID id
+        +String audioFileUrl
+        +Duration length
+        +String mimeType
+        +RecordingType type
+        +RecordingStatus status
+        +DateTime recordedAt
+        +DateTime expiresAt
+        +UUID patientId
+        +UUID doctorId
+        +upload()
+        +delete()
+        +archive()
+    }
+
+    class RecordingType {
+        <<enumeration>>
+        CLINICAL
+        PERSONAL
+    }
+
+    class RecordingStatus {
+        <<enumeration>>
+        RECORDING
+        UPLOADED
+        TRANSCRIBED
+        ARCHIVED
+        DELETED
+    }
+
+    class Transcription {
+        +UUID id
+        +UUID recordingId
+        +String rawText
+        +String language
+        +Float confidenceScore
+        +Map~String,Any~ metadata
+        +DateTime createdAt
+        +List~TranscriptSegment~ segments
+        +process()
+        +correct()
+    }
+
+    class TranscriptSegment {
+        +Integer startTime
+        +Integer endTime
+        +String text
+        +Float confidence
+    }
+
+    class SummarizationOutput {
+        +UUID id
+        +UUID transcriptionId
+        +String summary
+        +String clinicalFindings
+        +String diagnosis
+        +String treatmentPlan
+        +Float confidenceScore
+        +String modelVersion
+        +SummaryStatus status
+        +DateTime generatedAt
+        +DateTime approvedAt
+        +UUID approvedBy
+        +generate()
+        +approve()
+        +reject()
+    }
+
+    class SummaryStatus {
+        <<enumeration>>
+        GENERATING
+        PENDING_REVIEW
+        APPROVED
+        REJECTED
+        SYNCED
+    }
+
+    class Patient {
+        +UUID id
+        +String medicalRecordNumber
+        +String firstName
+        +String lastName
+        +Date dateOfBirth
+        +String email
+        +String phone
+        +List~ConsentRecord~ consents
+        +DateTime createdAt
+        +grantConsent()
+        +withdrawConsent()
+        +requestDataDeletion()
+    }
+
+    class ConsentRecord {
+        +String consentType
+        +Boolean isActive
+        +DateTime grantedAt
+        +DateTime withdrawnAt
+    }
+
+    class Doctor {
+        +UUID id
+        +String firstName
+        +String lastName
+        +String email
+        +String licenseNumber
+        +String specialty
+        +List~UUID~ clinicIds
+        +DoctorRole role
+        +DateTime createdAt
+        +createRecording()
+        +reviewSummary()
+    }
+
+    class DoctorRole {
+        <<enumeration>>
+        PHYSICIAN
+        SPECIALIST
+        RESIDENT
+        NURSE_PRACTITIONER
+    }
+
+    class PersonalNote {
+        +UUID id
+        +UUID doctorId
+        +UUID recordingId
+        +String title
+        +String content
+        +List~String~ tags
+        +DateTime createdAt
+        +DateTime updatedAt
+        +create()
+        +update()
+        +delete()
+    }
+
+    class MedicalSource {
+        +UUID id
+        +String title
+        +String pdfUrl
+        +String sourceType
+        +String specialty
+        +String publisher
+        +DateTime publishedDate
+        +DateTime lastVerified
+        +List~String~ tags
+        +String version
+        +search()
+        +download()
+        +verify()
+    }
+
+    class SourceType {
+        <<enumeration>>
+        GUIDELINE
+        PROTOCOL
+        DRUG_REFERENCE
+        CLINICAL_PATHWAY
+    }
+
+    class Recommendation {
+        +UUID id
+        +UUID summarizationOutputId
+        +String recommendationType
+        +String description
+        +String rationale
+        +List~UUID~ medicalSourceIds
+        +Float confidenceScore
+        +DateTime generatedAt
+        +generate()
+        +linkToSource()
+    }
+
+    class RecommendationType {
+        <<enumeration>>
+        DIAGNOSTIC_TEST
+        TREATMENT
+        REFERRAL
+        FOLLOW_UP
+        MEDICATION
+    }
+
+    class AuditTrail {
+        +UUID id
+        +String entityType
+        +UUID entityId
+        +UUID userId
+        +String action
+        +Map~String,Any~ changeSnapshot
+        +String ipAddress
+        +DateTime timestamp
+        +log()
+        +query()
+    }
+
+    class AuditAction {
+        <<enumeration>>
+        CREATE
+        READ
+        UPDATE
+        DELETE
+        APPROVE
+        CONSENT_GRANT
+        CONSENT_WITHDRAW
+        EXPORT
+        SYNC
+    }
+
+    class DataRetentionPolicy {
+        +UUID id
+        +String entityType
+        +Duration retentionPeriod
+        +Boolean autoDelete
+        +String applicableRegion
+        +DateTime effectiveFrom
+        +apply()
+        +calculateExpiryDate()
+    }
+
+    Recording "1" --> "1" Transcription : generates
+    Transcription "1" --> "*" TranscriptSegment : contains
+    Transcription "1" --> "1" SummarizationOutput : produces
+    SummarizationOutput "1" --> "*" Recommendation : includes
+    Recording "*" --> "1" Patient : belongs to
+    Recording "*" --> "1" Doctor : created by
+    Recording "1" --> "0..1" PersonalNote : documented as
+    PersonalNote "*" --> "1" Doctor : owned by
+    Patient "1" --> "*" ConsentRecord : has
+    Recommendation "*" --> "*" MedicalSource : references
+    AuditTrail "*" --> "1" Doctor : performed by
+    DataRetentionPolicy "1" --> "*" Recording : governs
