@@ -19,7 +19,11 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.0",
     "express": "^5.1.0",
+    "pino": "^10.1.0",
+    "prisma": "^6.19.0",
+    "sqlite3": "^5.1.7",
     "zod": "^4.1.12"
   }
 }

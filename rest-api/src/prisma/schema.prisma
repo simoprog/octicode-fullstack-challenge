@@ -1,0 +1,56 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+}
+
+model Patient {
+    id          String      @id @default(uuid())
+    firstName   String
+    lastName    String
+    dateOfBirth String
+    email       String?
+    phone       String?
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    voiceNotes  VoiceNote[]
+
+    @@map("patients")
+}
+
+model VoiceNote {
+    id         String    @id @default(uuid())
+    patientId  String
+    doctorId   String
+    duration   Int
+    recordedAt DateTime
+    status     String
+    fileSize   Int?
+    format     String?
+    location   String?
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    patient    Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    summaries  Summary[]
+
+    @@index([patientId])
+    @@map("voice_notes")
+}
+
+model Summary {
+    id              String    @id @default(uuid())
+    voiceNoteId     String
+    content         String
+    keyPoints       String? // JSON array stored as string
+    recommendations String? // JSON array stored as string
+    generatedAt     DateTime
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+    voiceNote       VoiceNote @relation(fields: [voiceNoteId], references: [id], onDelete: Cascade)
+
+    @@index([voiceNoteId])
+    @@map("summaries")
+}
