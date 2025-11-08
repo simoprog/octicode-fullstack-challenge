@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import prisma from '../db.js';
-import { CreateVoiceNoteSchema } from '../types.js';
+import prisma from '../db';
+import { CreateVoiceNoteSchema } from '../types';
 
 export const createVoiceNotesRouter = () => {
   const router = Router();

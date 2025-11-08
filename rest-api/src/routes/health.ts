@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import prisma from '../db.js';
+import prisma from '../db';
 
 export const createHealthRouter = () => {
   const router = Router();

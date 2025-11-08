@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import prisma from '../db.js';
-import { CreatePatientSchema, UpdatePatientSchema } from '../types.js';
+import prisma from '../db';
+import { CreatePatientSchema, UpdatePatientSchema } from '../types';
 
 export const createPatientsRouter = () => {
   const router = Router();

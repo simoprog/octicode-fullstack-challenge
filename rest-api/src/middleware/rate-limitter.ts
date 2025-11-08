@@ -6,7 +6,7 @@ interface RateLimitEntry {
 }
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
-const RATE_LIMIT = 100;
+const RATE_LIMIT = 5;
 const WINDOW_MS = 15 * 60 * 1000;
 
 export const rateLimiter = (
