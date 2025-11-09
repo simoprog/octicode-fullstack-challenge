@@ -262,6 +262,10 @@ prisma/
 └── dev.db               # SQLite database (generated)
 
 src/
+├──prisma/
+├── schema.prisma         # Database schema
+├── seed.ts              # Sample data seeding
+└── dev.db               # SQLite database (generated)
 ├── index.ts             # App entry point
 ├── types.ts             # Zod schemas & TypeScript types
 ├── db.ts                # Prisma Client singleton
