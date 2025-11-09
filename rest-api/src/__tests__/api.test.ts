@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import prisma from '../db';
-import app from '../server.ts';
+import app from '../server';
 
 const API_KEY = 'demo-key-12345';
 
